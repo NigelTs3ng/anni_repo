@@ -153,11 +153,25 @@ export default function MemoryPage() {
 
         {/* Description - Elegant Header Style */}
         {memory.description && (
-          <div className="px-6 md:px-8 mb-20 animate-fade-in-slow delay-300">
+          <div className="px-6 md:px-8 mb-12 animate-fade-in-slow delay-300">
             <div className="max-w-3xl mx-auto text-center">
               <p className="font-serif text-xl md:text-2xl lg:text-3xl text-rose-400/90 leading-relaxed tracking-wide font-light whitespace-pre-wrap">
                 {memory.description}
               </p>
+            </div>
+          </div>
+        )}
+
+        {/* Keychain Image - Portrait below Description */}
+        {memory.keychain_image_url && (
+          <div className="px-6 md:px-8 mb-20 animate-fade-in-slow delay-400">
+            <div className="max-w-md mx-auto flex justify-center">
+              <img
+                src={memory.keychain_image_url}
+                alt={`${memory.title} keychain`}
+                className="max-w-full h-auto max-h-[400px] object-contain"
+                loading="lazy"
+              />
             </div>
           </div>
         )}

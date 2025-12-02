@@ -10,12 +10,14 @@ export default function AdminMemoryEdit() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [uploadingKeychain, setUploadingKeychain] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     memory_date: '',
   })
+  const [keychainImage, setKeychainImage] = useState<File | null>(null)
 
   useEffect(() => {
     if (id) {
@@ -63,9 +65,22 @@ export default function AdminMemoryEdit() {
     setError(null)
 
     try {
-      const updated = await updateMemory(id, formData)
+      // Upload keychain image if provided
+      let keychainImageUrl: string | null = memory?.keychain_image_url || null
+      if (keychainImage) {
+        const url = await uploadMedia(id, keychainImage)
+        if (url) {
+          keychainImageUrl = url
+        }
+      }
+
+      const updated = await updateMemory(id, {
+        ...formData,
+        keychain_image_url: keychainImageUrl,
+      })
       if (updated) {
         setMemory(updated)
+        setKeychainImage(null)
         alert('Memory updated successfully! 💕')
       } else {
         setError('Failed to update memory')
@@ -239,6 +254,30 @@ export default function AdminMemoryEdit() {
                 rows={6}
                 className="w-full px-4 py-3 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
               />
+            </div>
+
+            <div>
+              <label htmlFor="keychainImage" className="block text-sm font-medium text-pink-700 mb-2">
+                Keychain Image (Portrait)
+              </label>
+              {memory.keychain_image_url && (
+                <div className="mb-3">
+                  <p className="text-xs text-pink-600 mb-2">Current keychain image:</p>
+                  <img
+                    src={memory.keychain_image_url}
+                    alt="Current keychain"
+                    className="max-w-[200px] h-auto border border-pink-200 rounded-lg"
+                  />
+                </div>
+              )}
+              <input
+                id="keychainImage"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setKeychainImage(e.target.files?.[0] || null)}
+                className="w-full px-4 py-3 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              />
+              <p className="text-xs text-pink-500 mt-1">Upload a portrait image of the keychain (will be displayed below description)</p>
             </div>
 
             <button

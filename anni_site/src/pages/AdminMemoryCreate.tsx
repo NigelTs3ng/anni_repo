@@ -11,6 +11,7 @@ export default function AdminMemoryCreate() {
     memory_date: '',
   })
   const [coverImage, setCoverImage] = useState<File | null>(null)
+  const [keychainImage, setKeychainImage] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -29,11 +30,21 @@ export default function AdminMemoryCreate() {
         }
       }
 
+      // Upload keychain image if provided
+      let keychainImageUrl: string | null = null
+      if (keychainImage) {
+        const url = await uploadMedia(formData.id, keychainImage)
+        if (url) {
+          keychainImageUrl = url
+        }
+      }
+
       // Create memory
       const memory = await createMemory({
         ...formData,
         memory_date: formData.memory_date || null,
         cover_image_url: coverImageUrl,
+        keychain_image_url: keychainImageUrl,
       })
 
       if (!memory) {
@@ -147,6 +158,20 @@ export default function AdminMemoryCreate() {
               onChange={(e) => setCoverImage(e.target.files?.[0] || null)}
               className="w-full px-4 py-3 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
             />
+          </div>
+
+          <div>
+            <label htmlFor="keychainImage" className="block text-sm font-medium text-pink-700 mb-2">
+              Keychain Image (Portrait) (Optional)
+            </label>
+            <input
+              id="keychainImage"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setKeychainImage(e.target.files?.[0] || null)}
+              className="w-full px-4 py-3 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            />
+            <p className="text-xs text-pink-500 mt-1">Upload a portrait image of the keychain (will be displayed below description)</p>
           </div>
 
           <div className="flex gap-4">

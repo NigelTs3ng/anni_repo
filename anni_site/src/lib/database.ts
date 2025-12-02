@@ -7,6 +7,7 @@ export interface Memory {
   created_at: string
   memory_date: string | null
   cover_image_url: string | null
+  keychain_image_url: string | null
 }
 
 export interface MemoryMedia {
@@ -71,6 +72,7 @@ export async function createMemory(data: {
   description: string
   memory_date?: string | null
   cover_image_url?: string | null
+  keychain_image_url?: string | null
 }): Promise<Memory | null> {
   const { data: memory, error } = await supabase
     .from('memories')
@@ -94,6 +96,7 @@ export async function updateMemory(
     description?: string
     memory_date?: string | null
     cover_image_url?: string | null
+    keychain_image_url?: string | null
   }
 ): Promise<Memory | null> {
   const { data: memory, error } = await supabase
