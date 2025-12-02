@@ -19,6 +19,7 @@ export default function MemoryPage() {
     }
 
     async function fetchData() {
+      if (!id) return
       try {
         const [memoryData, mediaData] = await Promise.all([
           getMemory(id),
