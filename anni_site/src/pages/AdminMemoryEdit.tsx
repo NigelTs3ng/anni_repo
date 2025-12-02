@@ -10,7 +10,6 @@ export default function AdminMemoryEdit() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [uploadingKeychain, setUploadingKeychain] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     title: '',
